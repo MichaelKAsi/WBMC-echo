@@ -1,0 +1,8 @@
+# Netlify reads this file from the site's base directory (wbmc-mobile-app).
+# Paths here are relative to that directory.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
