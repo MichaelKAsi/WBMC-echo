@@ -1,0 +1,43 @@
+{
+  "packageId": "za.org.wbmc.echo",
+  "host": "echoandriod.netlify.app",
+  "name": "Echo — Word Based Missional Church",
+  "launcherName": "Echo",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#24156E",
+  "themeColorDark": "#24156E",
+  "navigationColor": "#24156E",
+  "navigationColorDark": "#24156E",
+  "navigationDividerColor": "#24156E",
+  "navigationDividerColorDark": "#24156E",
+  "backgroundColor": "#24156E",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://echoandriod.netlify.app/icon-512.png",
+  "maskableIconUrl": "https://echoandriod.netlify.app/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "C:\\Users\\Sound\\keys\\echo-upload.keystore",
+    "alias": "echo"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://echoandriod.netlify.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://echoandriod.netlify.app/",
+  "minSdkVersion": 21,
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1.0.0"
+}
