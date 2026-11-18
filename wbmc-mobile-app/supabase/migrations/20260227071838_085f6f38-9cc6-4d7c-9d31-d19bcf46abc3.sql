@@ -1,0 +1,1 @@
+ALTER TABLE public.hymns DROP CONSTRAINT IF EXISTS hymns_hymn_number_key;

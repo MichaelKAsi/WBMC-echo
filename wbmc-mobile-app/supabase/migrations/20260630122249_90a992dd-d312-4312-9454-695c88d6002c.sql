@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentorship_prompt_dismissals integer NOT NULL DEFAULT 0;

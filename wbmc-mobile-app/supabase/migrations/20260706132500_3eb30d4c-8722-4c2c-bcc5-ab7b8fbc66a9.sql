@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Authenticated users can update building fund" ON public.building_fund;
+CREATE POLICY "Admins can update building fund" ON public.building_fund FOR UPDATE TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));

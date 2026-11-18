@@ -1,0 +1,13 @@
+project_id = "olmxyqogonocefiwhwcm"
+
+[functions.bible-api]
+verify_jwt = false
+
+[functions.admin-users]
+verify_jwt = false
+
+[functions.sync-youtube-videos]
+verify_jwt = false
+
+[functions.hubspot-create-contact]
+verify_jwt = false

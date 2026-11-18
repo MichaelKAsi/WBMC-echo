@@ -1,0 +1,1 @@
+ALTER TABLE public.mentorship_applications ADD COLUMN IF NOT EXISTS details jsonb;
