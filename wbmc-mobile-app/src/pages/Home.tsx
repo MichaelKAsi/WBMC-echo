@@ -24,7 +24,7 @@ import { useTabBadges } from "@/hooks/useTabBadges";
 import { useUserRole } from "@/hooks/useUserRole";
 import { BibleForKidsTab } from "@/components/tabs/BibleForKidsTab";
 import echoLogo from "@/assets/echo-logo-blue.png";
-import { MentorshipPromptModal } from "@/components/MentorshipPromptModal";
+
 
 
 const Home = () => {
@@ -190,9 +190,6 @@ const Home = () => {
 
       <BuildingFundModal open={fundModalOpen} onOpenChange={setFundModalOpen} />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
-      <MentorshipPromptModal user={user} />
-      
-      
     </>
   );
 };

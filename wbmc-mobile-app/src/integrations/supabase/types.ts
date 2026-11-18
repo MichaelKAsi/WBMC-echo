@@ -215,6 +215,30 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_notifications: {
+        Row: {
+          email_count: number
+          id: string
+          sent_at: string
+          slide_id: string
+          sms_count: number
+        }
+        Insert: {
+          email_count?: number
+          id?: string
+          sent_at?: string
+          slide_id: string
+          sms_count?: number
+        }
+        Update: {
+          email_count?: number
+          id?: string
+          sent_at?: string
+          slide_id?: string
+          sms_count?: number
+        }
+        Relationships: []
+      }
       gallery_slides: {
         Row: {
           created_at: string
@@ -633,6 +657,7 @@ export type Database = {
           developer_skills: string | null
           developer_status: string
           email: string | null
+          email_gallery_opt_in: boolean
           first_name: string | null
           full_name: string | null
           id: string
@@ -650,6 +675,7 @@ export type Database = {
           parent_full_name: string | null
           parent_phone: string | null
           phone_number: string | null
+          sms_gallery_opt_in: boolean
           updated_at: string
           user_id: string
           wants_mentorship: boolean
@@ -664,6 +690,7 @@ export type Database = {
           developer_skills?: string | null
           developer_status?: string
           email?: string | null
+          email_gallery_opt_in?: boolean
           first_name?: string | null
           full_name?: string | null
           id?: string
@@ -681,6 +708,7 @@ export type Database = {
           parent_full_name?: string | null
           parent_phone?: string | null
           phone_number?: string | null
+          sms_gallery_opt_in?: boolean
           updated_at?: string
           user_id: string
           wants_mentorship?: boolean
@@ -695,6 +723,7 @@ export type Database = {
           developer_skills?: string | null
           developer_status?: string
           email?: string | null
+          email_gallery_opt_in?: boolean
           first_name?: string | null
           full_name?: string | null
           id?: string
@@ -712,6 +741,7 @@ export type Database = {
           parent_full_name?: string | null
           parent_phone?: string | null
           phone_number?: string | null
+          sms_gallery_opt_in?: boolean
           updated_at?: string
           user_id?: string
           wants_mentorship?: boolean
@@ -931,10 +961,42 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: undefined
       }
+      get_pastor_post_comments: {
+        Args: { _post_id: string }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      get_pastor_post_stats: {
+        Args: { _post_ids: string[] }
+        Returns: {
+          comment_count: number
+          like_count: number
+          liked_by_me: boolean
+          post_id: string
+        }[]
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      get_video_comments: {
+        Args: { _video_id: string }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          user_id: string
+          user_name: string
+          video_id: string
+        }[]
+      }
+      get_video_like_count: { Args: { _video_id: string }; Returns: number }
       grant_mentorship_roles: {
         Args: {
           _role: string
@@ -979,12 +1041,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1008,11 +1070,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1033,11 +1095,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1058,11 +1120,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1075,11 +1137,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

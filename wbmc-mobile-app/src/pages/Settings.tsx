@@ -30,6 +30,8 @@ interface ProfileData {
   membership_status: string;
   wants_mentorship: boolean;
   mentorship_role: string | null;
+  sms_gallery_opt_in: boolean;
+  email_gallery_opt_in: boolean;
 }
 
 interface MentorDetails {
@@ -105,6 +107,7 @@ export default function Settings() {
     phone_number: "", birth_date: "", avatar_url: null,
     is_wbmc_member: false, membership_status: "none",
     wants_mentorship: false, mentorship_role: null,
+    sms_gallery_opt_in: false, email_gallery_opt_in: false,
   });
 
   const [applicationId, setApplicationId] = useState<string | null>(null);
@@ -116,7 +119,7 @@ export default function Settings() {
   const [membership, setMembershipState] = useState<MembershipDetails>(emptyMembership);
 
   // Wrappers that auto-mark sections dirty
-  const PERSONAL_FIELDS: (keyof ProfileData)[] = ["first_name","last_name","full_name","phone_number","birth_date"];
+  const PERSONAL_FIELDS: (keyof ProfileData)[] = ["first_name","last_name","full_name","phone_number","birth_date","sms_gallery_opt_in","email_gallery_opt_in"];
   const CHURCH_FIELDS: (keyof ProfileData)[] = ["is_wbmc_member","membership_status"];
   const setProfile: typeof setProfileState = (updater) => {
     setProfileState((prev) => {
@@ -153,7 +156,7 @@ export default function Settings() {
 
       const { data: p } = await supabase
         .from("profiles")
-        .select("first_name, last_name, full_name, email, phone_number, birth_date, avatar_url, is_wbmc_member, membership_status, wants_mentorship, mentorship_role")
+        .select("first_name, last_name, full_name, email, phone_number, birth_date, avatar_url, is_wbmc_member, membership_status, wants_mentorship, mentorship_role, sms_gallery_opt_in, email_gallery_opt_in")
         .eq("user_id", user.id)
         .maybeSingle();
       if (p) {
@@ -169,6 +172,8 @@ export default function Settings() {
           membership_status: p.membership_status ?? "none",
           wants_mentorship: !!p.wants_mentorship,
           mentorship_role: p.mentorship_role ?? null,
+          sms_gallery_opt_in: !!(p as any).sms_gallery_opt_in,
+          email_gallery_opt_in: !!(p as any).email_gallery_opt_in,
         });
       }
 
@@ -250,15 +255,14 @@ export default function Settings() {
 
   const syncMentorshipApplication = async (extra?: Record<string, any>) => {
     if (!userId || !applicationId) return;
-    const fullName = `${profile.first_name ?? ""} ${profile.last_name ?? ""}`.trim() || (profile.full_name ?? "");
-    await supabase.from("mentorship_applications").update({
+    const { error } = await supabase.from("mentorship_applications").update({
       first_name: profile.first_name ?? "",
       last_name: profile.last_name ?? "",
-      full_name: fullName,
       email: profile.email ?? "",
       phone: profile.phone_number ?? "",
       ...(extra ?? {}),
     } as any).eq("id", applicationId);
+    if (error) console.error("Failed to sync mentorship application:", error);
   };
 
   const savePersonal = async () => {
@@ -272,6 +276,8 @@ export default function Settings() {
         full_name: fullName || null,
         phone_number: profile.phone_number || null,
         birth_date: profile.birth_date || null,
+        sms_gallery_opt_in: profile.sms_gallery_opt_in,
+        email_gallery_opt_in: profile.email_gallery_opt_in,
       }).eq("user_id", userId);
       if (error) throw error;
       await syncMentorshipApplication();
@@ -490,6 +496,17 @@ export default function Settings() {
                 <div className="space-y-1.5">
                   <Label htmlFor="birth_date" className="text-xs flex items-center gap-1.5"><Calendar className="h-3 w-3" /> Birth date</Label>
                   <Input id="birth_date" type="date" value={profile.birth_date ?? ""} onChange={(e) => setProfile({ ...profile, birth_date: e.target.value })} />
+                </div>
+                <div className="space-y-2 rounded-xl border border-border p-3">
+                  <p className="text-xs font-medium text-foreground">New gallery photo alerts</p>
+                  <label className="flex items-center justify-between text-sm text-foreground">
+                    SMS notifications
+                    <input type="checkbox" className="h-4 w-4 accent-primary" checked={profile.sms_gallery_opt_in} onChange={(e) => setProfile({ ...profile, sms_gallery_opt_in: e.target.checked })} />
+                  </label>
+                  <label className="flex items-center justify-between text-sm text-foreground">
+                    Email notifications
+                    <input type="checkbox" className="h-4 w-4 accent-primary" checked={profile.email_gallery_opt_in} onChange={(e) => setProfile({ ...profile, email_gallery_opt_in: e.target.checked })} />
+                  </label>
                 </div>
                 <Button onClick={savePersonal} disabled={savingPersonal} className="w-full">
                   {savingPersonal && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Save Personal Details

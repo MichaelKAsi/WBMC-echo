@@ -123,8 +123,14 @@ export function ContentApprovalTab() {
     mutationFn: async ({ id, type, approve }: { id: string; type: string; approve: boolean }) => {
       const status = approve ? "approved" : "rejected";
       const table = type === "announcement" ? "announcements" : type === "gallery" ? "gallery_slides" : type === "marketplace" ? "marketplace_items" : "videos";
-      const { error } = await supabase.from(table).update({ status }).eq("id", id);
+      const { data, error } = await supabase.from(table).update({ status }).eq("id", id).select("id");
       if (error) throw error;
+      if (!data || data.length === 0) throw new Error("You don't have permission to update this item.");
+      if (approve && type === "gallery") {
+        supabase.functions.invoke("notify-gallery-upload", { body: { slideId: id } }).then(({ error: nErr }) => {
+          if (nErr) console.error("Gallery notification failed:", nErr);
+        });
+      }
     },
     onSuccess: (_, vars) => {
       queryClient.invalidateQueries({ queryKey: ["pending_content"] });

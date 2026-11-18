@@ -60,10 +60,18 @@ const Admin = () => {
   const addGallerySlideMutation = useAddGallerySlide();
   const deleteGallerySlideMutation = useDeleteGallerySlide();
 
-  const handleAddGallerySlide = (slide: Omit<GallerySlide, "id" | "createdAt">) => {
+  const handleAddGallerySlide = ({ notify, ...slide }: Omit<GallerySlide, "id" | "createdAt"> & { notify?: boolean }) => {
     const status = isAdmin ? "approved" : "pending";
     addGallerySlideMutation.mutate({ ...slide, status, submitted_by: user?.id }, {
-      onSuccess: () => { toast({ title: isAdmin ? "Gallery slide added" : "Submitted for approval", description: isAdmin ? `"${slide.title}" has been added.` : `"${slide.title}" is pending admin approval.` }); },
+      onSuccess: (row: any) => {
+        toast({ title: isAdmin ? "Gallery slide added" : "Submitted for approval", description: isAdmin ? `"${slide.title}" has been added.` : `"${slide.title}" is pending admin approval.` });
+        if (isAdmin && notify && row?.id) {
+          supabase.functions.invoke("notify-gallery-upload", { body: { slideId: row.id } }).then(({ data, error }) => {
+            if (error) toast({ title: "Notifications failed", description: error.message, variant: "destructive" });
+            else toast({ title: "Users notified", description: `${data?.smsCount ?? 0} SMS sent, ${data?.emailCount ?? 0} email contacts updated.` });
+          });
+        }
+      },
       onError: () => { toast({ title: "Error", description: "Failed to add gallery slide.", variant: "destructive" }); },
     });
   };

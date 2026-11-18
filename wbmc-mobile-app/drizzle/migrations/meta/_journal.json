@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791786269000,
+      "tag": "0000_admin_update_gallery_videos",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794974237498,
+      "tag": "0001_tighten_open_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794974658906,
+      "tag": "0002_private_likes_comments_owner_rows",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794974787124,
+      "tag": "0003_lock_hymn_announcement_delete",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794975046199,
+      "tag": "0004_lock_hymn_announcement_writes",
+      "breakpoints": true
+    }
+  ]
+}

@@ -25,12 +25,9 @@ export function useVideoLikes(videoId: string) {
   return useQuery({
     queryKey: ["video-likes", videoId],
     queryFn: async () => {
-      const { count, error } = await supabase
-        .from("video_likes")
-        .select("*", { count: "exact", head: true })
-        .eq("video_id", videoId);
+      const { data, error } = await supabase.rpc("get_video_like_count", { _video_id: videoId });
       if (error) throw error;
-      return count ?? 0;
+      return data ?? 0;
     },
   });
 }
@@ -84,10 +81,7 @@ export function useVideoComments(videoId: string) {
     queryKey: ["video-comments", videoId],
     queryFn: async (): Promise<VideoComment[]> => {
       const { data, error } = await supabase
-        .from("video_comments")
-        .select("*")
-        .eq("video_id", videoId)
-        .order("created_at", { ascending: false });
+        .rpc("get_video_comments", { _video_id: videoId });
       if (error) throw error;
       return data ?? [];
     },

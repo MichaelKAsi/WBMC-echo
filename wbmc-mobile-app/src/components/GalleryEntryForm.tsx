@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface GalleryEntryFormProps {
-  onAddEntry: (entry: { title: string; images: string[]; mobileImages: string[]; googleDriveLink: string }) => void;
+  onAddEntry: (entry: { title: string; images: string[]; mobileImages: string[]; googleDriveLink: string; notify?: boolean }) => void;
 }
 
 function ImageUploadSection({
@@ -89,6 +89,7 @@ export function GalleryEntryForm({ onAddEntry }: GalleryEntryFormProps) {
   const [desktopImages, setDesktopImages] = useState<{ url: string; name: string }[]>([]);
   const [mobileImages, setMobileImages] = useState<{ url: string; name: string }[]>([]);
   const [googleDriveLink, setGoogleDriveLink] = useState("");
+  const [notify, setNotify] = useState(true);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
@@ -143,6 +144,7 @@ export function GalleryEntryForm({ onAddEntry }: GalleryEntryFormProps) {
       images: desktopImages.map((img) => img.url),
       mobileImages: mobileImages.map((img) => img.url),
       googleDriveLink: googleDriveLink.trim(),
+      notify,
     });
 
     setTitle("");
@@ -202,6 +204,11 @@ export function GalleryEntryForm({ onAddEntry }: GalleryEntryFormProps) {
           Link to full album for "View all pictures"
         </p>
       </div>
+
+      <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+        <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} className="h-4 w-4 accent-primary" />
+        Notify users (SMS / email) when published
+      </label>
 
       <Button type="submit" className="w-full" disabled={!isValid}>
         <Plus className="h-4 w-4 mr-2" />

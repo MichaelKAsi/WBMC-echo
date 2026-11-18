@@ -49,8 +49,35 @@ serve(async (req) => {
       );
     }
 
-    const rows = (data.items || [])
-      .filter((item: any) => item.contentDetails?.videoId)
+    const candidates = (data.items || [])
+      .filter((item: any) => item.contentDetails?.videoId);
+
+    // Only keep videos that are PUBLIC on YouTube.
+    // playlistItems includes unlisted/private uploads, so check each video's status.
+    const videoIds = candidates.map((item: any) => item.contentDetails.videoId);
+    let publicIds = new Set<string>();
+    if (videoIds.length > 0) {
+      const statusUrl =
+        `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}` +
+        `&id=${videoIds.join(",")}&part=status&maxResults=50`;
+      const statusRes = await fetch(statusUrl);
+      const statusData = await statusRes.json();
+      if (statusRes.ok) {
+        publicIds = new Set(
+          (statusData.items || [])
+            .filter((v: any) => v.status?.privacyStatus === "public")
+            .map((v: any) => v.id),
+        );
+      } else {
+        console.error("YouTube status check error:", statusData);
+      }
+    }
+
+    const rows = candidates
+      // Exclude live streams and scheduled premieres (liveBroadcastContent: "live" | "upcoming")
+      .filter((item: any) => (item.snippet.liveBroadcastContent || "none") === "none")
+      // Exclude unlisted/private videos
+      .filter((item: any) => publicIds.has(item.contentDetails.videoId))
       .map((item: any) => {
         const videoId = item.contentDetails.videoId;
         return {

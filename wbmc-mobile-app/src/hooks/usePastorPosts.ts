@@ -61,26 +61,12 @@ export function usePastorPosts() {
       let commentsMap: Record<string, number> = {};
 
       if (postIds.length > 0) {
-        const { data: likes } = await supabase
-          .from("pastor_post_likes")
-          .select("post_id, user_id")
-          .in("post_id", postIds);
-        if (likes) {
-          likes.forEach((l: any) => {
-            likesMap[l.post_id] = (likesMap[l.post_id] || 0) + 1;
-            if (user && l.user_id === user.id) userLikesSet.add(l.post_id);
-          });
-        }
-
-        const { data: comments } = await supabase
-          .from("pastor_post_comments")
-          .select("post_id")
-          .in("post_id", postIds);
-        if (comments) {
-          comments.forEach((c: any) => {
-            commentsMap[c.post_id] = (commentsMap[c.post_id] || 0) + 1;
-          });
-        }
+        const { data: stats } = await supabase.rpc("get_pastor_post_stats", { _post_ids: postIds });
+        (stats || []).forEach((r: any) => {
+          likesMap[r.post_id] = r.like_count;
+          commentsMap[r.post_id] = r.comment_count;
+          if (r.liked_by_me) userLikesSet.add(r.post_id);
+        });
       }
 
       return visiblePosts.map((p: any) => ({
@@ -204,10 +190,7 @@ export function usePastorPostComments(postId: string) {
     queryKey: ["pastor_post_comments", postId],
     queryFn: async (): Promise<PastorPostComment[]> => {
       const { data, error } = await supabase
-        .from("pastor_post_comments")
-        .select("*")
-        .eq("post_id", postId)
-        .order("created_at", { ascending: true });
+        .rpc("get_pastor_post_comments", { _post_id: postId });
       if (error) throw error;
       return (data || []).map((c: any) => ({
         id: c.id,

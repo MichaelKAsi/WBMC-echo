@@ -49,7 +49,7 @@ export function AppSidebar({ open, onOpenChange, onNavigateToMarket, onNavigateT
     { label: "Marketplace", icon: Store, action: "market" as const, path: undefined as string | undefined, show: true },
     { label: "Pastor's Corner", icon: BookHeart, action: "pastor" as const, path: undefined as string | undefined, show: true },
     { label: "My Notes", icon: StickyNote, action: undefined as string | undefined, path: "/notes", show: !!user },
-    { label: "Eagles Mentorship", icon: Bird, action: undefined as string | undefined, path: "/mentorship", show: !!user },
+    { label: "Eagles Mentorship", icon: Bird, action: undefined as string | undefined, path: "/mentorship", show: false },
     { label: "Pastor Admin", icon: BookHeart, action: undefined as string | undefined, path: "/pastor-admin", show: canAccessPastorAdmin },
     { label: "Admin", icon: Shield, action: undefined as string | undefined, path: "/login", show: canAccessAdmin },
     { label: "Developers", icon: Code2, action: "developers" as const, path: undefined as string | undefined, show: !!user },
