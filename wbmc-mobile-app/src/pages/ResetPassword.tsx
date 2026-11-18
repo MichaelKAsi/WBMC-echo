@@ -53,7 +53,7 @@ const ResetPassword = () => {
       setSuccess(true);
       toast({ title: "Password updated", description: "Redirecting you to Echo..." });
       await supabase.auth.signOut();
-      setTimeout(() => { window.location.href = "https://wbmc.netlify.app/"; }, 1500);
+      setTimeout(() => { window.location.href = "/"; }, 1500);
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } finally {
@@ -85,7 +85,7 @@ const ResetPassword = () => {
               <div className="text-center space-y-4">
                 <CheckCircle2 className="h-12 w-12 text-primary mx-auto" />
                 <p className="text-sm text-muted-foreground">You can now sign in with your new password.</p>
-                <Button className="w-full" onClick={() => { window.location.href = "https://wbmc.netlify.app/"; }}>
+                <Button className="w-full" onClick={() => { window.location.href = "/"; }}>
                   Continue to Echo
                 </Button>
               </div>

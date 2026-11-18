@@ -1,6 +1,6 @@
 # Echo — Android app (Trusted Web Activity)
 
-The Play Store app is a thin Android wrapper that opens https://wbmc.netlify.app
+The Play Store app is a thin Android wrapper that opens https://echoandriod.netlify.app
 full-screen in Chrome. Website updates deploy through Netlify and appear in the
 app immediately. A new Play release is only needed when the icon, name, colours
 or Android settings change.
@@ -12,22 +12,22 @@ or Android settings change.
    ```
 2. In this folder (`android-twa/`), run:
    ```
-   bubblewrap init --manifest https://wbmc.netlify.app/manifest.webmanifest
+   bubblewrap init --manifest https://echoandriod.netlify.app/manifest.webmanifest
    ```
    - Answer **Yes** when it offers to install the JDK and the Android SDK.
    - Use these answers:
 
      | Prompt | Answer |
      |---|---|
-     | Domain | `wbmc.netlify.app` |
+     | Domain | `echoandriod.netlify.app` |
      | Application name / Short name | `Echo — Word Based Missional Church` / `Echo` |
      | Application ID | `za.org.wbmc.echo` (can never change after the first upload) |
      | Starting version code | `1` |
      | Display mode | `standalone` |
      | Orientation | `portrait` |
      | Theme / background / nav colour | `#24156e` |
-     | Icon URL | `https://wbmc.netlify.app/icon-512.png` |
-     | Maskable icon URL | `https://wbmc.netlify.app/icon-512.png` |
+     | Icon URL | `https://echoandriod.netlify.app/icon-512.png` |
+     | Maskable icon URL | `https://echoandriod.netlify.app/icon-512.png` |
      | Monochrome icon | skip |
      | Include support for Play Billing | No |
      | Request geolocation permission | No |
@@ -53,7 +53,7 @@ This produces `app-release-bundle.aab`, which you upload to Play, and
    `wbmc-mobile-app/public/.well-known/assetlinks.json`. Also add the upload key's
    fingerprint (`bubblewrap fingerprint list`) so local test builds verify too.
 4. Deploy to Netlify, then check that
-   https://wbmc.netlify.app/.well-known/assetlinks.json serves the file.
+   https://echoandriod.netlify.app/.well-known/assetlinks.json serves the file.
 5. Reinstall the app from the Play internal testing link. The address bar should be gone.
 
 ## Release an update

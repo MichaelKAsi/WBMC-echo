@@ -325,7 +325,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             parent_email: isKidsAccount ? parentEmail : "",
             parent_phone: isKidsAccount ? parentPhone : "",
           },
-          emailRedirectTo: "https://wbmc.netlify.app/",
+          emailRedirectTo: `${window.location.origin}/`,
         },
       });
       if (error) throw error;

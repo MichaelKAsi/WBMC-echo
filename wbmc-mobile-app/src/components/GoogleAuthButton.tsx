@@ -27,7 +27,7 @@ export function GoogleIcon({ className }: { className?: string }) {
 
 export function GoogleAuthButton({
   label = "Continue with Google",
-  redirectTo = "https://wbmc.netlify.app",
+  redirectTo = window.location.origin,
   className,
   variant = "outline",
   size,
