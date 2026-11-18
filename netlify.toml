@@ -1,0 +1,9 @@
+# The app lives in wbmc-mobile-app/, so build from there.
+# With base set, command and publish are relative to wbmc-mobile-app/.
+[build]
+  base = "wbmc-mobile-app"
+  command = "npm install --no-audit --no-fund && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
