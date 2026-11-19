@@ -55,7 +55,7 @@ android {
     namespace "za.org.wbmc.echo"
     defaultConfig {
         applicationId "za.org.wbmc.echo"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 36
         versionCode 1
         versionName "1.0.0"
